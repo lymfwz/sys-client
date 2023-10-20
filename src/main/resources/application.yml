@@ -1,0 +1,26 @@
+grpc:
+  client:
+    grpc-server:
+      address: 'static://127.0.0.1:50051'
+      negotiationType: plaintext
+    GLOBAL:
+      immediate-connect-timeout: 60000
+      full-stream-decompression: true
+spring:
+  application:
+    name: grpc-client
+
+server:
+  port: 8888
+  tomcat:
+    connection-timeout: 180000000
+    accept-count: 1000
+    max-connections: 2000
+#  servlet:
+#    context-path: /linedis
+spring-boot:
+  application:
+    sources:
+      additionalProperties:
+        java:
+          additional-opts: -Xms256m -Xmx512m

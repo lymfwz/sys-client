@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Upload and Display</title>
+    <style>
+        /*!* 居中容器 *!*/
+        /*.center-container {*/
+        /*    display: flex;*/
+        /*    justify-content: center;*/
+        /*    align-items: center;*/
+        /*    height: 80vh; !* 设置容器高度，根据需要调整 *!*/
+        /*}*/
+
+        /* 上传区域样式 */
+        .upload-area {
+            border: 5px dashed #ccc;
+            padding: 50px;
+            margin-left: 15%;
+            text-align: center;
+            width: 50%;
+        }
+
+        /* 显示区域样式 */
+        .image-container {
+            max-width: 30%;
+            max-height: 80vh; /* 设置显示区域最大高度，根据需要调整 */
+            border: 5px dashed #ccc;
+            margin-left: 15%;
+            margin-top: 50px;
+            /*display: none; !* 初始时隐藏显示区域 *!*/
+        }
+
+        .uploaded-image {
+            max-width: 800px;
+            /*max-height: ;*/
+        }
+    </style>
+</head>
+<body>
+<div class="center-container">
+    <div class="upload-area">
+        <h2>上传图片</h2>
+        <!-- 上传表单 -->
+        <form id="imageForm" method="post" action="" enctype="multipart/form-data">
+            <input id="fileInput" type="file" name="image" accept="image/*"/>
+            <button type="button" id="uploadButton">上传</button>
+        </form>
+    </div>
+    <div class="image-container">
+        <h2>显示图片</h2>
+        <!-- 图片显示区域 -->
+        <img class="uploaded-image" th:src="'data:image/jpeg;base64,' + ${image_base64}" alt="Image"/>
+    </div>
+</div>
+<!-- 显示上传结果 -->
+<!--<div id="result"></div>-->
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#uploadButton").click(function () {
+            var formData = new FormData();
+            // formData.append("image", $("#fileInput")[0].files[0]);
+            formData.append("image", $("#fileInput"));
+            console.log(formData)
+
+            $.ajax({
+                url: "/test", // 替换为实际Controller的URL
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: 'multipart/form-data',
+                cache: 'false',
+                timeout: 180000000,
+                success: function (data) {
+                    // 处理响应
+                    $("#result").text(data);
+                    $(".uploaded-image").attr("src", 'data:image/jpeg;base64,' + data);
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
