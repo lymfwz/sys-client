@@ -1,7 +1,7 @@
 grpc:
   client:
     grpc-server:
-      address: 'static://127.0.0.1:50051'
+      address: 'static://127.0.0.1:50055'
       negotiationType: plaintext
     GLOBAL:
       max-inbound-message-size: 10000MB

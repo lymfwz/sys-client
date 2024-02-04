@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Upload and Display</title>
+    <style>
+        body {
+            /* 设置渐变背景 */
+            background: linear-gradient(to right, #e811b7, #0bf1d6);
+            /* 使背景充满整个页面 */
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .center-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: normal;
+            height: 100vh; /* 使容器占据整个视口高度 */
+        }
+
+        .upload-area {
+            max-width: 30%; /* 上传区域的最大宽度 */
+            padding-left: 100px;
+            padding-right: 100px;
+            padding-bottom: 30px;
+            padding-top: 10px;
+            margin-top: 30px;
+            border: 5px dashed #000000;
+        }
+
+        .image-container {
+            max-width: 80%; /* 显示图片区域的最大宽度 */
+            margin-top: 20px;
+        }
+
+        /* 图片样式 */
+        .uploaded-image {
+            max-width: 100%; /* 图片最大宽度为容器的宽度 */
+            max-height: 70vh; /* 图片的最大高度 */
+        }
+
+
+
+    </style>
+</head>
+<body>
+<div class="center-container">
+    <div class="upload-area">
+        <h2>上传图片</h2>
+        <!-- 上传表单 -->
+        <form id="imageForm" method="post" action="" enctype="multipart/form-data">
+            <input id="fileInput" type="file" name="image" accept="image/*"/>
+            <button type="button" id="uploadButton">上传</button>
+        </form>
+    </div>
+    <div class="image-container">
+        <h2>显示图片</h2>
+        <!-- 图片显示区域 -->
+        <!--        <img class="uploaded-image" th:src="'data:image/jpeg;base64,' + ${image_base64}" alt="Image"/>-->
+        <!--显示static目录下img里的res图片-->
+        <!--如果想将src动态替换，即ajax调用函数后更改src-->
+        <img id="image" class="uploaded-image" src="/img-view/none.png" alt="Image"/>
+    </div>
+</div>
+<!-- 显示上传结果 -->
+<!--<div id="result"></div>-->
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        document.getElementById("uploadButton").addEventListener("click", function () {
+            const fileInput = document.createElement("input");
+            fileInput.type = "file";
+            fileInput.accept = "image/*";
+            fileInput.addEventListener("change", function (event) {
+                const selectedFile = event.target.files[0];
+                // 处理选择的文件
+            });
+            fileInput.click(); // 触发文件选择对话框
+            document.getElementById("uploadButton").disabled = true;
+        });
+
+    });
+</script>
+
+
+</body>
+</html>
