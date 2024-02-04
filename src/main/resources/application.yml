@@ -4,23 +4,30 @@ grpc:
       address: 'static://127.0.0.1:50051'
       negotiationType: plaintext
     GLOBAL:
-      immediate-connect-timeout: 60000
-      full-stream-decompression: true
+      max-inbound-message-size: 10000MB
 spring:
   application:
     name: grpc-client
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1000MB
+      max-request-size: 10000MB
+  thymeleaf:
+    cache: false
+  mvc:
+    static-path-pattern: /static/**
 
 server:
-  port: 8888
+  port: 8080
   tomcat:
-    connection-timeout: 180000000
-    accept-count: 1000
-    max-connections: 2000
+    connection-timeout: 600000
 #  servlet:
 #    context-path: /linedis
-spring-boot:
-  application:
-    sources:
-      additionalProperties:
-        java:
-          additional-opts: -Xms256m -Xmx512m
+img-process:
+  request-path: /img-process/**
+
+  # Windows系统下的资源路径
+  windows-path: D:/img-process
+  # Linux系统下的资源路径
+  linux-path: /home/img-process

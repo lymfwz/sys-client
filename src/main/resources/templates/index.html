@@ -2,87 +2,260 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Image Upload and Display</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revised Image Layout</title>
     <style>
-        /*!* 居中容器 *!*/
-        /*.center-container {*/
-        /*    display: flex;*/
-        /*    justify-content: center;*/
-        /*    align-items: center;*/
-        /*    height: 80vh; !* 设置容器高度，根据需要调整 *!*/
-        /*}*/
-
-        /* 上传区域样式 */
-        .upload-area {
-            border: 5px dashed #ccc;
-            padding: 50px;
-            margin-left: 15%;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #20202c;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .image-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .image-card {
+            width: 45%; /* Set the width to almost half of the container to fit two items in a row */
+            margin: 10px;
+            border: 1px solid #ccc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #292b3f;
+        }
+        .image-card img {
+            width: 100%;
+            height: auto; /* Maintain aspect ratio */
+        }
+        .text-section {
+            padding: 15px;
             text-align: center;
-            width: 50%;
+            width: 100%;
         }
-
-        /* 显示区域样式 */
+        .button {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid white;
+            background-color: #d450d6;
+            color: #fcfcfc;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .button:hover {
+            background-color: #43a7ee;
+            color: #fff;
+        }
+        .buttons-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .buttons-row .button {
+            width: 20%; /* Adjust the width for four buttons in a row */
+            margin: 0 10px;
+        }
+        .image-title {
+            text-align: center;
+            margin-bottom: 5px;
+            color: white;
+        }
         .image-container {
-            max-width: 30%;
-            max-height: 80vh; /* 设置显示区域最大高度，根据需要调整 */
-            border: 5px dashed #ccc;
-            margin-left: 15%;
-            margin-top: 50px;
-            /*display: none; !* 初始时隐藏显示区域 *!*/
+            /*border: 3px solid #0ad9bf;*/
+            padding: 15px;
+            height: 300px;
+            width: 45%;
+            /*margin: 5px;*/
         }
-
-        .uploaded-image {
-            max-width: 800px;
-            /*max-height: ;*/
+        .border-red {
+            border: 2px solid #20202c;
+        }
+        .border-orange {
+            border: 5px dashed orange;
         }
     </style>
 </head>
 <body>
-<div class="center-container">
-    <div class="upload-area">
-        <h2>上传图片</h2>
-        <!-- 上传表单 -->
-        <form id="imageForm" method="post" action="" enctype="multipart/form-data">
-            <input id="fileInput" type="file" name="image" accept="image/*"/>
-            <button type="button" id="uploadButton">上传</button>
-        </form>
+<div class="container border-red">
+    <div class="text-section">
+
+        <!--设置标题楷体，颜色白色，修改这行代码-->
+        <h1 style="font-family: serif;color: #0bf1d6">妙“笔”生花-文物绘图及修复系统</h1>
+
+
     </div>
-    <div class="image-container">
-        <h2>显示图片</h2>
-        <!-- 图片显示区域 -->
-        <img class="uploaded-image" th:src="'data:image/jpeg;base64,' + ${image_base64}" alt="Image"/>
+    <div class="image-row">
+        <div class="image-card border-orange">
+            <div class="image-title">原始图片</div>
+            <div class="image-container">
+
+                <!--修改图片路径-->
+                <img id="Image1" src="/static/img/school.png" alt="Image 1">
+            </div>
+            <div class="text-section">
+<!--                <input id="fileInput" type="file" accept="image/*" style="display:none;"/>-->
+<!--                <form id="imageForm" method="post" action="" enctype="multipart/form-data">-->
+<!--                    <input id="fileInput" type="file" name="image" accept="image/*" />-->
+<!--                    <button type="button" id="uploadButton" style="display:none;">上传</button>-->
+<!--                </form>-->
+                <button id="uploadImage" type="button" class="button border-red">上传图片</button>
+            </div>
+        </div>
+        <div class="image-card border-orange">
+            <div class="image-title">处理效果</div>
+            <div class="image-container">
+
+                <img id="Image2" src="/static/img/school.png" alt="Image 2">
+            </div>
+            <div class="text-section">
+                <button id="downloadImage" class="button border-red">下载图片</button>
+            </div>
+        </div>
+    </div>
+    <div class="text-section">
+        <div class="image-title">预处理与线稿提取</div>
+    </div>
+    <div class="buttons-row border-red">
+        <button id="test" class="button border-red">Test</button>
+        <button id="canny" class="button border-red">Canny</button>
+        <button id="fusion" class="button border-red">Fusion</button>
     </div>
 </div>
-<!-- 显示上传结果 -->
-<!--<div id="result"></div>-->
-
-
+</body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        $("#uploadButton").click(function () {
-            var formData = new FormData();
-            // formData.append("image", $("#fileInput")[0].files[0]);
-            formData.append("image", $("#fileInput"));
-            console.log(formData)
+        document.getElementById("uploadImage").addEventListener("click", async function () {
+            const fileInput = document.createElement("input");
+            fileInput.type = "file";
+            fileInput.accept = "image/*";
 
-            $.ajax({
-                url: "/test", // 替换为实际Controller的URL
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: 'multipart/form-data',
-                cache: 'false',
-                timeout: 180000000,
-                success: function (data) {
+            const selectedFile = await selectFile(fileInput);
+
+            if (selectedFile) {
+                // 处理选择的文件
+                // 进行图片上传
+                const formData = new FormData();
+                formData.append("image", selectedFile);
+
+                try {
+                    // 禁用按钮
+                    //disableButtons();
+                    const data = await uploadImage(formData);
+                    var urls = data.split("$");
                     // 处理响应
-                    $("#result").text(data);
-                    $(".uploaded-image").attr("src", 'data:image/jpeg;base64,' + data);
+                    $("#Image1").attr("src", urls[0]);
+                    $("#Image2").attr("src", urls[1]);
+                    //enableButtons();
+                    alert("上传成功");
+                } catch (error) {
+                    // 处理上传错误
+                    //enableButtons();
+                    alert("上传失败，超过单次通信发送数据上限");
+                }
+            } else {
+                // 用户取消了文件选择
+                // 启用按钮
+                // disableButtons();
+            }
+        });
+
+        function selectFile(fileInput) {
+            return new Promise((resolve) => {
+                fileInput.addEventListener("change", function (event) {
+
+                    const selectedFile = event.target.files[0];
+                    resolve(selectedFile);
+                });
+
+                fileInput.click(); // 触发文件选择对话框
+            });
+        }
+
+        function uploadImage(formData) {
+
+            alert("请等待图片上传完成......");
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "/test", // 替换为实际 Controller 的 URL
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    cache: false,
+                    contentType: false,
+                    success: function (data) {
+                        resolve(data);
+                    },
+                    error: function () {
+                        reject(new Error("上传失败"));
+                    }
+                });
+            });
+        }
+
+        function disableButtons() {
+            document.getElementById("uploadButton").disabled = true;
+            const buttons = document.querySelectorAll("#uploadButton, #downloadImage, #test, #canny, #fusion");
+            buttons.forEach((button) => {
+                button.disabled = true;
+            });
+        }
+
+        function enableButtons() {
+
+            const buttons = document.querySelectorAll("#uploadButton, #downloadImage, #test, #canny, #fusion");
+            buttons.forEach((button) => {
+                button.disabled = false;
+            });
+        }
+
+        // 切换图片功能
+        // 使用事件委托监听按钮点击事件
+        // 按钮1点击事件
+        $("#test").on("click", function () {
+            loadImage("img1");
+        });
+
+        // 按钮2点击事件
+        $("#canny").on("click", function () {
+            loadImage("img2");
+        });
+
+        // 按钮3点击事件
+        $("#fusion").on("click", function () {
+            loadImage("img3");
+        });
+
+        // 加载图片的函数
+        function loadImage(imageFileName) {
+            $.ajax({
+                url: "/switchImgUrl", // 替换为您的后端服务端点
+                type: "GET",
+                data: { imgName: imageFileName },
+                success: function (data) {
+                    // 更新图像的 src 属性
+                    $("#Image2").attr("src", data);
+                    alert("加载图片成功");
+                },
+                error: function () {
+                    alert("加载图片失败");
                 }
             });
-        });
+        }
     });
 </script>
-
-</body>
 </html>
